@@ -2,6 +2,7 @@ package com.salonms.salonmsBackend.config;
 
 import com.salonms.salonmsBackend.filter.JwtFilter;
 import com.salonms.salonmsBackend.service.CustomUserDetailsService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -32,10 +33,13 @@ public class SecurityConfig {
         this.customUserDetailsService = customUserDetailsService;
     }
 
+    @Value("${frontend.url}")
+    private String frontendUrl;
+
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
-        corsConfiguration.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
+        corsConfiguration.setAllowedOrigins(Arrays.asList(frontendUrl));
         corsConfiguration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
         corsConfiguration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
         corsConfiguration.setAllowCredentials(true);
