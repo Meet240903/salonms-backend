@@ -1,6 +1,7 @@
 package com.salonms.salonmsBackend.service;
 
 import com.salonms.salonmsBackend.model.Service;
+import com.salonms.salonmsBackend.model.Staff;
 import com.salonms.salonmsBackend.repo.ServiceMasterRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -38,5 +39,35 @@ public class BeautyTreatmentServiceImpl implements BeautyTreatmentService {
     public ResponseEntity<Object> showAllServices() {
         List<Service> serviceList = serviceMasterRepo.findByIsActive(true);
         return new ResponseEntity<>(serviceList, HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<Object> editService(String id, Service service) {
+        Optional<Service> optionalService = serviceMasterRepo.findById(id);
+        if (optionalService.isPresent()) {
+            Service existedService = optionalService.get();
+            existedService.setName(service.getName());
+            existedService.setDescription(service.getDescription());
+            existedService.setDuration(service.getDuration());
+
+            serviceMasterRepo.save(existedService);
+            return new ResponseEntity<>(service, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Service details not found by given id", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Override
+    public ResponseEntity<Object> deleteService(Service service) {
+        Optional<Service> optionalService = serviceMasterRepo.findById(service.getId());
+        if (optionalService.isPresent()) {
+            Service existedService = optionalService.get();
+            existedService.setActive(false);
+
+            serviceMasterRepo.save(existedService);
+            return new ResponseEntity<>(service, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Service details not found by given id", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }

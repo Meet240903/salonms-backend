@@ -45,4 +45,30 @@ public class BeautyTreatmentController {
         }
         return responseEntity;
     }
+
+    @PutMapping("/edit-service/{id}")
+    public ResponseEntity<Object> editService(@PathVariable String id, @RequestBody Service service) {
+        ResponseEntity<Object> responseEntity;
+        try {
+            responseEntity = beautyTreatmentService.editService(id, service);
+        } catch (BadRequestException badRequestException) {
+            responseEntity = new ResponseEntity<>(badRequestException.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            responseEntity = new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return responseEntity;
+    }
+
+    @DeleteMapping("/delete-service")
+    public ResponseEntity<Object> deleteService(@RequestBody Service service) {
+        ResponseEntity<Object> responseEntity;
+        try {
+            responseEntity = beautyTreatmentService.deleteService(service);
+        } catch (BadRequestException badRequestException) {
+            responseEntity = new ResponseEntity<>(badRequestException.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            responseEntity = new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return responseEntity;
+    }
 }
