@@ -58,4 +58,17 @@ public class AppointmentController {
         }
         return responseEntity;
     }
+
+    @DeleteMapping("/delete-appointment")
+    public ResponseEntity<Object> deleteAppointment(@RequestBody Appointments appointments) {
+        ResponseEntity<Object> responseEntity;
+        try {
+            responseEntity = appointmentService.deleteAppointment(appointments);
+        } catch (BadRequestException badRequestException) {
+            responseEntity = new ResponseEntity<>(badRequestException.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            responseEntity = new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return responseEntity;
+    }
 }

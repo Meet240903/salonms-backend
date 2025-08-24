@@ -96,4 +96,18 @@ public class AppointmentServiceImpl implements AppointmentService {
             return new ResponseEntity<>("Appointments details not found by given id", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @Override
+    public ResponseEntity<Object> deleteAppointment(Appointments appointments) {
+        Optional<Appointments> optionalAppointments = appointmentRepo.findById(appointments.getId());
+        if (optionalAppointments.isPresent()) {
+            Appointments existedAppointment = optionalAppointments.get();
+            existedAppointment.setActive(false);
+
+            appointmentRepo.save(existedAppointment);
+            return new ResponseEntity<>(appointments, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Appointment details not found by given id", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
